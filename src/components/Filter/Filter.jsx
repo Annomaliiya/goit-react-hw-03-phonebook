@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 import styles from './Filter.module.css';
 
 
-const Filter = ({ filter, handleChange, }) => {
+const Filter = ({ filter, handleChange,filterInputId }) => {
   
-  
-  const filterInputId = nanoid();
+
   return (
       <>
         <label className={styles.label} htmlFor={filterInputId}>Find contacts by name

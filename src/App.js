@@ -1,6 +1,7 @@
 
 import { Component } from 'react';
 
+import { nanoid } from 'nanoid';
 
 import Section from './components/Section';
 import ContactForm from "./components/ContactForm";
@@ -18,7 +19,40 @@ class App extends Component {
     filter: '',
   };
 
-  changeContact = (newContact) => {
+  filterInputId = nanoid();
+
+  componentDidMount() {
+
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+    const newContactsList = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (newContactsList !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(newContactsList));
+    }
+  }
+
+  changeContact = (name, number) => {
+    if (this.state.contacts.find((contact) => {
+      return contact.name.toLowerCase() === name.toLowerCase();
+    })) {
+      alert(name + " is already in contacts.");
+      return;
+    }
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      number: number
+    };
     this.setState(prevState => {
       return (
         { contacts: [...prevState.contacts, newContact] }
@@ -63,7 +97,7 @@ class App extends Component {
           <ContactForm contacts={this.state.contacts} handleChange={this.handleChange} changeContact={this.changeContact} />
         </Section>
         <Section title='Contacts'>
-          <Filter filter={this.state.filter} handleChange={this.handleChange} />
+          <Filter filter={this.state.filter} handleChange={this.handleChange} filterInputId={this.filterInputId} />
           <ContactList contacts={contacts} deleteFunction={this.deleteContact}
           />
 
@@ -72,4 +106,5 @@ class App extends Component {
     )
   };
 }
+
 export default App;

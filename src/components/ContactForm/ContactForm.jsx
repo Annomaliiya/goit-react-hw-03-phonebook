@@ -20,22 +20,13 @@ class ContactForm extends Component {
     
     addContact = (event) => {
         event.preventDefault();
-        if (this.props.contacts.find((contact) => {
-         return contact.name.toLowerCase() === this.state.name.toLowerCase();
-        })) {
-             alert(this.state.name + " is already in contacts.");
-             return;
-        }
-        const newContact = {
-            id: nanoid(),
-            name: this.state.name,
-            number: this.state.number
-        };
-        this.props.changeContact(newContact);
+
+        this.props.changeContact(this.state.name, this.state.number);
     
 
     this.setState({ name: "", number: "" });
   };
+
 
     render() {
         return <>
@@ -71,5 +62,5 @@ class ContactForm extends Component {
 export default ContactForm;
 
 ContactForm.propTypes = {
-    handleChange: PropTypes.func.isRequired
+    changeContact: PropTypes.func.isRequired
 }
